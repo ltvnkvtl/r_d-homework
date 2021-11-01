@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:features" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:features" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:features/hw-2-event-loop" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="efd5c896-0cbd-46f4-8e3a-a8a8c6ecfc07" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/hw-2-event-loop/promise-then-with-callback.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="20GbZGNof2NeUD5HZlJKjQdssVS" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="C:\Users\vital\Desktop\WebProg\r_d\r_d-homework\hw-1-enviroment-setup\node_modules\typescript\lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vital\Desktop\WebProg\r_d\r_d-homework\hw-2-event-loop" />
+      <recent name="C:\Users\vital\Desktop\WebProg\r_d\r_d-homework\hw-1-enviroment-setup" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vital\Desktop\WebProg\r_d\r_d-homework\hw-1-enviroment-setup" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Node.js.task1.js">
+    <configuration name="task1.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/hw-2-event-loop/task1.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/hw-1-enviroment-setup/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/hw-1-enviroment-setup/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/hw-1-enviroment-setup/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="tslint:fix" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/hw-1-enviroment-setup/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="tslint:fix" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.tslint:fix" />
+        <item itemvalue="npm.test" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="Node.js.task1.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="efd5c896-0cbd-46f4-8e3a-a8a8c6ecfc07" name="Default Changelist" comment="" />
+      <created>1635673924114</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1635673924114</updated>
+      <workItem from="1635673925277" duration="4578000" />
+      <workItem from="1635679368667" duration="12106000" />
+      <workItem from="1635761924755" duration="1410000" />
+    </task>
+    <task id="LOCAL-00001" summary="build(hw-1): environment setup&#10;&#10;- typescript, jest, git hooks, linter, prettier">
+      <created>1635758661699</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1635758661699</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feature(hw-1): product structure + logging">
+      <created>1635758736552</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1635758736552</updated>
+    </task>
+    <task id="LOCAL-00003" summary="test(hw-1): add tests for Product + ProductBucket">
+      <created>1635760606176</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1635760606176</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="features/hw-2-event-loop" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="build(hw-1): environment setup&#10;&#10;- typescript, jest, git hooks, linter, prettier" />
+    <MESSAGE value="feature(hw-1): product structure + logging" />
+    <MESSAGE value="test(hw-1): add tests for Product + ProductBucket" />
+    <option name="LAST_COMMIT_MESSAGE" value="test(hw-1): add tests for Product + ProductBucket" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="717" y="382" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1635676522117">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="717" y="382" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635676522117" />
+    <state x="740" y="335" key="FileChooserDialogImpl" timestamp="1635761922225">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="740" y="335" key="FileChooserDialogImpl/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761922225" />
+    <state width="1899" height="396" key="GridCell.Tab.0.bottom" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.0.center" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.0.left" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.0.right" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.1.bottom" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.1.bottom/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.1.center" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.1.center/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.1.left" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.1.left/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.1.right" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.1.right/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.2.bottom" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.2.bottom/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.2.center" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.2.center/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.2.left" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.2.left/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.2.right" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.2.right/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.3.bottom" timestamp="1635761923229">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.3.bottom/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923229" />
+    <state width="1899" height="396" key="GridCell.Tab.3.center" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.3.center/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.3.left" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.3.left/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+    <state width="1899" height="396" key="GridCell.Tab.3.right" timestamp="1635761923228">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1899" height="396" key="GridCell.Tab.3.right/0.0.1920.1160/1920.0.1920.1160@0.0.1920.1160" timestamp="1635761923228" />
+  </component>
+</project>
