@@ -1,16 +1,20 @@
-import {ProductBucket} from "./app";
+import { ProductBucket } from './app';
 
 function main(): void {
+    console.time('Creating + filling time');
     const productNames = ['milk', 'apple', 'juice', 'fish', 'mango'];
     const productBucket = new ProductBucket();
 
-    console.log('Filling the basket with 1000 products')
-    console.time('Time');
     for (let i = 0; i < 1000; i++) {
-      productBucket.addProduct(productNames[i % 5]);
+        productBucket.addProduct(productNames[i % 5]);
     }
-    console.timeEnd('Time');
+    console.log('Creating Product bucket and filling it with 1000 products');
+    console.timeEnd('Creating + filling time');
 
+    console.time('Access time');
+    productBucket.getProductByIndex(49);
+    console.log('Time to access 50th element');
+    console.timeEnd('Access time');
     console.log('№50', productBucket.getProductByIndex(49));
 }
 

@@ -1,6 +1,8 @@
 {
   "extends": "tslint-config-airbnb",
   "rules": {
+    "no-parameter-reassignment": false,
+    "no-increment-decrement": false,
     "no-floating-promises": true,
     "max-line-length": false,
     "ter-indent": [false],
