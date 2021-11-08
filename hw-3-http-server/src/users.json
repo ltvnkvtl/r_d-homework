@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "name": "Vitaly",
+        "role": "admin",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6IlZpdGFseSIsImlhdCI6MTYzNjM5Mzk2OCwiZXhwIjoxNjM2NDM3MTY4fQ.v3y3zAy8xXSShQe8A2vwWhlNqilpkrzyqXS_b6KCfdA"
+    },
+    {
+        "name": "Vova",
+        "role": "user",
+        "id": 2,
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJuYW1lIjoiVm92YSIsImlhdCI6MTYzNjM5NDg3OCwiZXhwIjoxNjM2NDIzNjc4fQ.4y6-TzISozuC_zfgi9CFX2cZ0hyiY5MfRBqQg8vIan4"
+    },
+    { "name": "Petya", "role": "admin", "id": 3 },
+    {
+        "name": "Maks",
+        "role": "user",
+        "id": 4,
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjM5NDg4NSwiZXhwIjoxNjM2NDIzNjg1fQ.FDOXgZ2erbxDD0oZnFPmG1hz9TGMMRpYB1ZVdU5pvcU"
+    }
+]
