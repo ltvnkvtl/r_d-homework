@@ -1,396 +1,350 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Swagger HW-3 Application API for Node.js course",
-    "description": "Swagger HW-3 Application API for Node.js course",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
-  },
-  "host": "localhost:3030",
-  "basePath": "/api",
-  "tags": [
-    {
-      "name": "Users",
-      "description": "API for users"
-    },
-    {
-      "name": "Tokens",
-      "description": "API for tokens"
-    }
-  ],
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "paths": {
-    "/users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get all users",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Users"
-            }
-          }
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Swagger HW-3 Application API for Node.js course",
+        "description": "Swagger HW-3 Application API for Node.js course",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
         }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Create new user",
-        "description": "Create new user",
-        "parameters": [
-          {
-            "name": "User",
-            "in": "body",
-            "required": true,
-            "description": "Post body to create user. Role can be 'user' or 'admin'",
-            "schema": {
-              "type": "object",
-              "required": [
-                "name"
-              ],
-              "properties": {
-                "name": {
-                  "type": "string"
+    },
+    "host": "localhost:3030",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API for users"
+        },
+        {
+            "name": "Tokens",
+            "description": "API for tokens"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Users"],
+                "summary": "Create new user",
+                "description": "Create new user",
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "required": true,
+                        "description": "Post body to create user. Role can be 'user' or 'admin'",
+                        "schema": {
+                            "type": "object",
+                            "required": ["name"],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string",
+                                    "default": "user"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "New user is created",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Empty post body or no 'name' field"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Users"],
+                "summary": "Edit user name or role",
+                "description": "Edit user name or role",
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "required": true,
+                        "description": "Post body to edit user. Id is required.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["id"],
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "New user is created",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Empty post body or no 'name' field"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "parameters": [
+                {
+                    "name": "userId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of user that we want to find or delete",
+                    "type": "number"
+                }
+            ],
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get user with given ID",
+                "responses": {
+                    "200": {
+                        "description": "User is found",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete user with given ID. Only admins with jwt token can delete User.",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "description": "JWT token of user",
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt",
+                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User is deleted",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "403": {
+                        "description": "Only admins with jwt token can delete User."
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/tokens": {
+            "get": {
+                "tags": ["Tokens"],
+                "summary": "Get all users tokens",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    },
+                    "404": {
+                        "description": "Every user does not have token"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Tokens"],
+                "summary": "Create user token",
+                "description": "Create user token",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "description": "User ID to create token.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["id"],
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User token is created",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Empty post body or no 'id' field"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Tokens"],
+                "summary": "Edit user token",
+                "description": "Edit user token",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "description": "User ID to edit token",
+                        "schema": {
+                            "type": "object",
+                            "required": ["id"],
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User token edited",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Empty post body or no 'name' field"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/token/{userId}": {
+            "parameters": [
+                {
+                    "name": "userId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of user that we want to find or delete",
+                    "type": "number"
+                }
+            ],
+            "get": {
+                "tags": ["Tokens"],
+                "summary": "Get user token with given ID",
+                "responses": {
+                    "200": {
+                        "description": "User token is found",
+                        "schema": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6IlZpdGFseSIsImlhdCI6MTYzNjQ2ODg5NywiZXhwIjoxNjM2NDk3Njk3fQ.XWVdIKi7kPAHUyDuIRaTYSfYfpqmYq1Fosn5Sc9ANVA"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found or doesn't have token"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete token with given ID. Only admins with jwt token can delete user token.",
+                "tags": ["Tokens"],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "description": "JWT token of user",
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt",
+                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User token is deleted",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "403": {
+                        "description": "Only admins with jwt token can delete users token."
+                    },
+                    "404": {
+                        "description": "User not found or doesn't have token"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "required": ["id", "role", "name"],
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "uniqueItems": true
                 },
                 "role": {
-                  "type": "string",
-                  "default": "user"
-                }
-              }
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "New user is created",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Empty post body or no 'name' field"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Edit user name or role",
-        "description": "Edit user name or role",
-        "parameters": [
-          {
-            "name": "User",
-            "in": "body",
-            "required": true,
-            "description": "Post body to edit user. Id is required.",
-            "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "number"
+                    "type": "string"
                 },
                 "name": {
-                  "type": "string"
+                    "type": "string"
                 },
-                "role": {
-                  "type": "string"
+                "token": {
+                    "type": "string"
                 }
-              }
             }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "New user is created",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Empty post body or no 'name' field"
-          },
-          "404": {
-            "description": "User not found"
-          }
         }
-      }
-    },
-    "/users/{userId}": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "ID of user that we want to find or delete",
-          "type": "number"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get user with given ID",
-        "responses": {
-          "200": {
-            "description": "User is found",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete user with given ID. Only admins with jwt token can delete User.",
-        "tags": [
-          "Users"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "description": "JWT token of user",
-            "schema": {
-              "type": "string",
-              "format": "jwt",
-              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User is deleted",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "403": {
-            "description": "Only admins with jwt token can delete User."
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
-    "/tokens": {
-      "get": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Get all users tokens",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Users"
-            }
-          },
-          "404": {
-            "description": "Every user does not have token"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Create user token",
-        "description": "Create user token",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "body",
-            "required": true,
-            "description": "User ID to create token.",
-            "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "number"
-                }
-              }
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "User token is created",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Empty post body or no 'id' field"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Edit user token",
-        "description": "Edit user token",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "body",
-            "required": true,
-            "description": "User ID to edit token",
-            "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "number"
-                }
-              }
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "User token edited",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Empty post body or no 'name' field"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
-    "/token/{userId}": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "ID of user that we want to find or delete",
-          "type": "number"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Get user token with given ID",
-        "responses": {
-          "200": {
-            "description": "User token is found",
-            "schema": {
-              "type": "string",
-              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6IlZpdGFseSIsImlhdCI6MTYzNjQ2ODg5NywiZXhwIjoxNjM2NDk3Njk3fQ.XWVdIKi7kPAHUyDuIRaTYSfYfpqmYq1Fosn5Sc9ANVA"
-            }
-          },
-          "404": {
-            "description": "User not found or doesn't have token"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete token with given ID. Only admins with jwt token can delete user token.",
-        "tags": [
-          "Tokens"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "description": "JWT token of user",
-            "schema": {
-              "type": "string",
-              "format": "jwt",
-              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User token is deleted",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "403": {
-            "description": "Only admins with jwt token can delete users token."
-          },
-          "404": {
-            "description": "User not found or doesn't have token"
-          }
-        }
-      }
     }
-  },
-  "definitions": {
-    "User": {
-      "required": [
-        "id",
-        "role",
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "number",
-          "uniqueItems": true
-        },
-        "role": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        }
-      }
-    }
-  }
 }

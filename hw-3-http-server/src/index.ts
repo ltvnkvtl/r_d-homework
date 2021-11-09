@@ -5,9 +5,9 @@ import { User } from './models/user';
 import { verifyToken } from './middleware/verifyToken';
 import * as swaggerDocument from './swagger.json';
 
-const jwt = require('jsonwebtoken'),
-      express = require('express'),
-      swaggerUi = require('swagger-ui-express');
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 app.use(
@@ -31,48 +31,48 @@ app.get('/api/users', (req: Request, res: Response) => {
 
 // создание пользователя
 app.post('/api/users', (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(400);
+    if (!req.body) return res.sendStatus(400);
 
-  const userName = req.body.name;
-  const userRole = req.body.role || 'user';
+    const userName = req.body.name;
+    const userRole = req.body.role || 'user';
 
-  // Validate user input
-  if (!userName) {
-    res.status(400).send('name is required');
-  }
+    // Validate user input
+    if (!userName) {
+        res.status(400).send('name is required');
+    }
 
-  const user: User = { name: userName, role: userRole, id: 0 };
+    const user: User = { name: userName, role: userRole, id: 0 };
 
-  const users = getParsedJsonData();
+    const users = getParsedJsonData();
 
-  const id = Math.max.apply(
-    Math,
-    users.map((user: User) => user.id!),
-  );
-  user.id = id + 1;
-  users.push(user);
-  fs.writeFileSync('src/users.json', JSON.stringify(users));
+    const id = Math.max.apply(
+        Math,
+        users.map((user: User) => user.id!),
+    );
+    user.id = id + 1;
+    users.push(user);
+    fs.writeFileSync('src/users.json', JSON.stringify(users));
 
-  res.status(200).send(user);
+    res.status(200).send(user);
 });
 
 // изменение имени и роли пользователя
 app.put('/api/users', (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(400);
+    if (!req.body) return res.sendStatus(400);
 
-  const userId = Number(req.body.id);
+    const userId = Number(req.body.id);
 
-  const users = getParsedJsonData();
-  const user: User | undefined = users.find((user: User) => user.id === userId);
+    const users = getParsedJsonData();
+    const user: User | undefined = users.find((user: User) => user.id === userId);
 
-  if (user) {
-    req.body.name && (user.name = req.body.name);
-    req.body.role && (user.role = req.body.role);
-    fs.writeFileSync('src/users.json', JSON.stringify(users));
-    res.status(200).send(user);
-  } else {
-    res.status(404).send('User not found');
-  }
+    if (user) {
+        req.body.name && (user.name = req.body.name);
+        req.body.role && (user.role = req.body.role);
+        fs.writeFileSync('src/users.json', JSON.stringify(users));
+        res.status(200).send(user);
+    } else {
+        res.status(404).send('User not found');
+    }
 });
 
 // получение одного пользователя по id
@@ -116,7 +116,7 @@ app.get('/api/tokens', (req: Request, res: Response) => {
                 acc[user.name] = user.token;
 
                 return acc;
-            },           { }),
+            }, {}),
         );
     } else {
         res.status(404).send('Every user does not have token');
@@ -167,16 +167,16 @@ app.put('/api/tokens', (req: Request, res: Response) => {
 
 // получение токена пользователя по id
 app.get('/api/token/:id', (req: Request, res: Response) => {
-  const userId = Number(req.params.id);
-  const users = getParsedJsonData();
+    const userId = Number(req.params.id);
+    const users = getParsedJsonData();
 
-  const user: User | undefined = users.find((user: User) => user.id === userId);
+    const user: User | undefined = users.find((user: User) => user.id === userId);
 
-  if (user) {
-    user.token ? res.send(user.token) : res.status(404).send('User does not have token');
-  } else {
-    res.status(404).send('User not found');
-  }
+    if (user) {
+        user.token ? res.send(user.token) : res.status(404).send('User does not have token');
+    } else {
+        res.status(404).send('User not found');
+    }
 });
 
 // удаление токена пользователя по id
