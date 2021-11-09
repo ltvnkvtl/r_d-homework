@@ -3,9 +3,11 @@ import fs from 'fs';
 
 import { User } from './models/user';
 import { verifyToken } from './middleware/verifyToken';
+import * as swaggerDocument from './swagger.json';
 
-const jwt = require('jsonwebtoken');
-const express = require('express');
+const jwt = require('jsonwebtoken'),
+      express = require('express'),
+      swaggerUi = require('swagger-ui-express');
 
 const app = express();
 app.use(
@@ -14,6 +16,7 @@ app.use(
     }),
 );
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const filePath = 'src/users.json';
 const port = 3030;
@@ -23,7 +26,53 @@ const port = 3030;
 // получение всех пользователей
 app.get('/api/users', (req: Request, res: Response) => {
     const users = getParsedJsonData();
-    res.send(users);
+    res.status(200).send(users);
+});
+
+// создание пользователя
+app.post('/api/users', (req: Request, res: Response) => {
+  if (!req.body) return res.sendStatus(400);
+
+  const userName = req.body.name;
+  const userRole = req.body.role || 'user';
+
+  // Validate user input
+  if (!userName) {
+    res.status(400).send('name is required');
+  }
+
+  const user: User = { name: userName, role: userRole, id: 0 };
+
+  const users = getParsedJsonData();
+
+  const id = Math.max.apply(
+    Math,
+    users.map((user: User) => user.id!),
+  );
+  user.id = id + 1;
+  users.push(user);
+  fs.writeFileSync('src/users.json', JSON.stringify(users));
+
+  res.status(200).send(user);
+});
+
+// изменение имени и роли пользователя
+app.put('/api/users', (req: Request, res: Response) => {
+  if (!req.body) return res.sendStatus(400);
+
+  const userId = Number(req.body.id);
+
+  const users = getParsedJsonData();
+  const user: User | undefined = users.find((user: User) => user.id === userId);
+
+  if (user) {
+    req.body.name && (user.name = req.body.name);
+    req.body.role && (user.role = req.body.role);
+    fs.writeFileSync('src/users.json', JSON.stringify(users));
+    res.status(200).send(user);
+  } else {
+    res.status(404).send('User not found');
+  }
 });
 
 // получение одного пользователя по id
@@ -32,53 +81,7 @@ app.get('/api/users/:id', (req: Request, res: Response) => {
     const users = getParsedJsonData();
 
     const user: User | undefined = users.find((user: User) => user.id === userId);
-    user ? res.send(user) : res.status(404).send('User not found');
-});
-
-// создание пользователя
-app.post('/api/users', (req: Request, res: Response) => {
-    if (!req.body) return res.sendStatus(400);
-
-    const userName = req.body.name;
-    const userRole = req.body.role || 'user';
-
-    // Validate user input
-    if (!userName) {
-        res.status(400).send('name is required');
-    }
-
-    const user: User = { name: userName, role: userRole, id: 0 };
-
-    const users = getParsedJsonData();
-
-    const id = Math.max.apply(
-        Math,
-        users.map((user: User) => user.id!),
-    );
-    user.id = id + 1;
-    users.push(user);
-    fs.writeFileSync('src/users.json', JSON.stringify(users));
-
-    res.send(user);
-});
-
-// изменение имени и роли пользователя
-app.put('/api/users', (req: Request, res: Response) => {
-    if (!req.body) return res.sendStatus(400);
-
-    const userId = Number(req.body.id);
-
-    const users = getParsedJsonData();
-    const user: User | undefined = users.find((user: User) => user.id === userId);
-
-    if (user) {
-        req.body.name && (user.name = req.body.name);
-        req.body.role && (user.role = req.body.role);
-        fs.writeFileSync('src/users.json', JSON.stringify(users));
-        res.send(user);
-    } else {
-        res.status(404).send(user);
-    }
+    user ? res.status(200).send(user) : res.status(404).send('User not found');
 });
 
 // удаление пользователя по id
@@ -93,7 +96,7 @@ app.delete('/api/users/:id', verifyToken, (req: Request, res: Response) => {
         if (index > -1) {
             const user = users.splice(index, 1)[0];
             fs.writeFileSync('src/users.json', JSON.stringify(users));
-            res.send(user);
+            res.status(200).send(user);
         } else {
             res.status(404).send('User not found');
         }
@@ -101,20 +104,6 @@ app.delete('/api/users/:id', verifyToken, (req: Request, res: Response) => {
 });
 
 // TOKENS =================================================================================
-
-// получение токена пользователя по id
-app.get('/api/token/:id', (req: Request, res: Response) => {
-    const userId = Number(req.params.id);
-    const users = getParsedJsonData();
-
-    const user: User | undefined = users.find((user: User) => user.id === userId);
-
-    if (user) {
-        user.token ? res.send(user.token) : res.status(404).send('User does not have token');
-    } else {
-        res.status(404).send('User not found');
-    }
-});
 
 // получение токенов всех пользователей
 app.get('/api/tokens', (req: Request, res: Response) => {
@@ -135,7 +124,7 @@ app.get('/api/tokens', (req: Request, res: Response) => {
 });
 
 // создание токена пользователю
-app.post('/api/token', (req: Request, res: Response) => {
+app.post('/api/tokens', (req: Request, res: Response) => {
     if (!req.body) return res.sendStatus(400);
 
     const userId = Number(req.body.id);
@@ -156,7 +145,7 @@ app.post('/api/token', (req: Request, res: Response) => {
 });
 
 // изменение токена пользователя
-app.put('/api/token', (req: Request, res: Response) => {
+app.put('/api/tokens', (req: Request, res: Response) => {
     if (!req.body) return res.sendStatus(400);
 
     const userId = Number(req.body.id);
@@ -174,6 +163,20 @@ app.put('/api/token', (req: Request, res: Response) => {
     } else {
         res.status(404).send('User not found');
     }
+});
+
+// получение токена пользователя по id
+app.get('/api/token/:id', (req: Request, res: Response) => {
+  const userId = Number(req.params.id);
+  const users = getParsedJsonData();
+
+  const user: User | undefined = users.find((user: User) => user.id === userId);
+
+  if (user) {
+    user.token ? res.send(user.token) : res.status(404).send('User does not have token');
+  } else {
+    res.status(404).send('User not found');
+  }
 });
 
 // удаление токена пользователя по id
