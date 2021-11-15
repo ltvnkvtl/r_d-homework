@@ -88,10 +88,10 @@
                         "description": "Post body to edit user. Id is required.",
                         "schema": {
                             "type": "object",
-                            "required": ["id"],
+                            "required": ["_id"],
                             "properties": {
-                                "id": {
-                                    "type": "number"
+                                "_id": {
+                                    "type": "string"
                                 },
                                 "name": {
                                     "type": "string"
@@ -199,16 +199,16 @@
                 "description": "Create user token",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "_id",
                         "in": "body",
                         "required": true,
                         "description": "User ID to create token.",
                         "schema": {
                             "type": "object",
-                            "required": ["id"],
+                            "required": ["_id"],
                             "properties": {
-                                "id": {
-                                    "type": "number"
+                                "_id": {
+                                    "type": "string"
                                 }
                             }
                         }
@@ -223,7 +223,7 @@
                         }
                     },
                     "400": {
-                        "description": "Empty post body or no 'id' field"
+                        "description": "Empty post body or no '_id' field"
                     },
                     "404": {
                         "description": "User not found"
@@ -236,16 +236,16 @@
                 "description": "Edit user token",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "_id",
                         "in": "body",
                         "required": true,
                         "description": "User ID to edit token",
                         "schema": {
                             "type": "object",
-                            "required": ["id"],
+                            "required": ["_id"],
                             "properties": {
-                                "id": {
-                                    "type": "number"
+                                "_id": {
+                                    "type": "string"
                                 }
                             }
                         }
@@ -268,7 +268,7 @@
                 }
             }
         },
-        "/token/{userId}": {
+        "/tokens/{userId}": {
             "parameters": [
                 {
                     "name": "userId",
@@ -329,10 +329,10 @@
     },
     "definitions": {
         "User": {
-            "required": ["id", "role", "name"],
+            "required": ["_id", "role", "name"],
             "properties": {
-                "id": {
-                    "type": "number",
+                "_id": {
+                    "type": "string",
                     "uniqueItems": true
                 },
                 "role": {
