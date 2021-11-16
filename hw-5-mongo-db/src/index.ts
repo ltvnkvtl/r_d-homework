@@ -40,44 +40,6 @@ startApp();
 
 // // TOKENS =================================================================================
 //
-// // получение токенов всех пользователей
-// app.get('/api/tokens', (req: Request, res: Response) => {
-//     const users = getParsedJsonData().filter((user: User) => !!user.token);
-//
-//     if (users.length) {
-//         res.send(
-//             users.reduce((acc: Record<string, string>, user: User) => {
-//                 // @ts-ignore
-//                 acc[user.name] = user.token;
-//
-//                 return acc;
-//             }, {}),
-//         );
-//     } else {
-//         res.status(404).send('Every user does not have token');
-//     }
-// });
-//
-// // создание токена пользователю
-// app.post('/api/tokens', (req: Request, res: Response) => {
-//     if (!req.body) return res.sendStatus(400);
-//
-//     const userId = Number(req.body.id);
-//
-//     const users = getParsedJsonData();
-//     const user: User | undefined = users.find((user: User) => user.id === userId);
-//
-//     if (user) {
-//         user.token = jwt.sign({ id: user.id, role: user.role, name: user.name }, `${process.env.TOKEN_KEY}`, {
-//             expiresIn: '12h',
-//         });
-//
-//         fs.writeFileSync('src/users.json', JSON.stringify(users));
-//         res.status(200).json(user);
-//     } else {
-//         res.status(404).send('User not found');
-//     }
-// });
 //
 // // изменение токена пользователя
 // app.put('/api/tokens', (req: Request, res: Response) => {
@@ -100,19 +62,6 @@ startApp();
 //     }
 // });
 //
-// // получение токена пользователя по id
-// app.get('/api/token/:id', (req: Request, res: Response) => {
-//     const userId = Number(req.params.id);
-//     const users = getParsedJsonData();
-//
-//     const user: User | undefined = users.find((user: User) => user.id === userId);
-//
-//     if (user) {
-//         user.token ? res.send(user.token) : res.status(404).send('User does not have token');
-//     } else {
-//         res.status(404).send('User not found');
-//     }
-// });
 //
 // // удаление токена пользователя по id
 // app.delete('/api/tokens/:id', verifyToken, (req: Request, res: Response) => {

@@ -8,6 +8,6 @@ tokenRouter.get('/tokens', TokenController.getAll)
 tokenRouter.get('/tokens/:id', TokenController.getOne)
 tokenRouter.post('/tokens', TokenController.create)
 tokenRouter.put('/tokens', TokenController.updateOne)
-tokenRouter.delete('/tokens/:id', verifyToken, TokenController.deleteOne)
+tokenRouter.delete('/tokens/:id', verifyToken, TokenController.deleteUserTokens)
 
 export default tokenRouter;
