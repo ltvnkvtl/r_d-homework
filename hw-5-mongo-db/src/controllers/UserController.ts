@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import User from '../models/user';
 
 class UserController {
@@ -23,6 +24,7 @@ class UserController {
     async getAll(req: Request, res: Response) {
         try {
             const users = await User.find();
+
             return res.json(users);
         } catch (e) {
             res.status(500).json(e);

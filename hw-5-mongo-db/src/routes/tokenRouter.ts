@@ -1,4 +1,5 @@
 import express from 'express';
+
 import TokenController from '../controllers/TokenController';
 import { verifyToken } from '../middleware/verifyToken';
 

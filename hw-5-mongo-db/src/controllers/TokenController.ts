@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import Token from '../models/token';
 import User from '../models/user';
 
@@ -89,7 +90,7 @@ class TokenController {
                 expiresIn: `${Math.floor(Math.random() * 11)}h`,
             });
 
-            let updatedUserTokens = await Token.findOneAndUpdate(
+            const updatedUserTokens = await Token.findOneAndUpdate(
                 { userId: id },
                 { $addToSet: { tokens: token } },
                 { new: true },

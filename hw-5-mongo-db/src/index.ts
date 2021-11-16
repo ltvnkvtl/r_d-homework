@@ -20,9 +20,9 @@ app.use('/api', userRouter);
 app.use('/api', tokenRouter);
 const port = 3030;
 
-function startApp() {
+function startApp(): void {
     try {
-        mongoose.connect(DB_URL, err => {
+        mongoose.connect(DB_URL, (err) => {
             if (err) return console.log(err);
             app.listen(port, () => console.log(`Server started on port ${port}`));
         });
