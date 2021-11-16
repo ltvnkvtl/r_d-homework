@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 
 export const verifyToken = (req: any, res: Response, next: NextFunction) => {
     const token =
@@ -13,7 +14,7 @@ export const verifyToken = (req: any, res: Response, next: NextFunction) => {
         return res.status(403).send('A token is required for authentication');
     }
     try {
-        req.user = jwt.verify(token, `${process.env.TOKEN_KEY}`);
+        req.user = jwt.verify(token, process.env.TOKEN_KEY);
     } catch (err) {
         return res.status(401).send('Invalid Token');
     }
