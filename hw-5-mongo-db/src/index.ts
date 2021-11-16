@@ -6,7 +6,7 @@ import userRouter from './routes/userRouter';
 import tokenRouter from './routes/tokenRouter';
 
 const swaggerUi = require('swagger-ui-express');
-const DB_URL = 'mongodb+srv://rd-hw-5-admin:lovegirlsnotboys@cluster0.9sspa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const DB_URL = `mongodb+srv://rd-hw-5-admin:${process.env.MONGO_PASSWORD}@cluster0.9sspa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const app = express();
 app.use(
