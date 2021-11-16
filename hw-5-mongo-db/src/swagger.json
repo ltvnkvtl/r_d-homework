@@ -127,7 +127,7 @@
                     "in": "path",
                     "required": true,
                     "description": "ID of user that we want to find or delete",
-                    "type": "number"
+                    "type": "string"
                 }
             ],
             "get": {
@@ -185,7 +185,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Users"
+                            "$ref": "#/definitions/Tokens"
                         }
                     },
                     "404": {
@@ -219,7 +219,7 @@
                     "200": {
                         "description": "User token is created",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/Tokens"
                         }
                     },
                     "400": {
@@ -256,7 +256,7 @@
                     "200": {
                         "description": "User token edited",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/Tokens"
                         }
                     },
                     "400": {
@@ -275,7 +275,7 @@
                     "in": "path",
                     "required": true,
                     "description": "ID of user that we want to find or delete",
-                    "type": "number"
+                    "type": "string"
                 }
             ],
             "get": {
@@ -314,7 +314,7 @@
                     "200": {
                         "description": "User token is deleted",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/Tokens"
                         }
                     },
                     "403": {
@@ -340,11 +340,26 @@
                 },
                 "name": {
                     "type": "string"
-                },
-                "token": {
-                    "type": "string"
                 }
             }
+        },
+      "Tokens": {
+        "required": ["_id", "userId", "tokens"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "userId": {
+            "uniqueItems": true
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
+      }
     }
 }
