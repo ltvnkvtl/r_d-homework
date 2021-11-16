@@ -343,23 +343,23 @@
                 }
             }
         },
-      "Tokens": {
-        "required": ["_id", "userId", "tokens"],
-        "properties": {
-          "_id": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "userId": {
-            "uniqueItems": true
-          },
-          "tokens": {
-            "type": "array",
-            "items": {
-              "type": "string"
+        "Tokens": {
+            "required": ["_id", "userId", "tokens"],
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "userId": {
+                    "uniqueItems": true
+                },
+                "tokens": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
             }
-          }
         }
-      }
     }
 }
