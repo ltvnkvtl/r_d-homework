@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
+import {IUser, RoleType} from "./iUser";
 
 const Schema = mongoose.Schema;
 
 const userScheme = new Schema({
-    name: { type: String, required: true },
-    role: { type: String, required: true },
-    token: { type: String, required: false },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    name: { type: String },
+    role: { type: String, enum: Object.values(RoleType), default: 'user' },
 });
-export default mongoose.model('User', userScheme);
+export default mongoose.model<IUser>('User', userScheme);

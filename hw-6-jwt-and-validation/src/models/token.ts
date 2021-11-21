@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const tokenScheme = new Schema({
-    userId: { type: String, required: true, unique: true },
-    tokens: { type: [String], default: [] },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    refreshToken: { type: String, required: true },
 });
 
 export default mongoose.model('Token', tokenScheme);
