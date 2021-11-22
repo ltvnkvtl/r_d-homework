@@ -20,10 +20,57 @@ class UserService {
     const tokens = TokenService.generateTokens({ ...userDto });
     await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return {
-      ...tokens,
-      user: userDto,
+    return { ...tokens, user: userDto };
+  }
+
+  async login(email: string, password: string) {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw ApiError.BadRequest(`User with email ${email} not found`);
     }
+
+    const isPassEquals = await bcrypt.compare(password, user.password);
+
+    if (!isPassEquals) {
+      throw ApiError.BadRequest(`Wrong password`);
+    }
+
+    const userDto = new UserDto(user);
+    const tokens = TokenService.generateTokens({ ...userDto });
+
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
+
+    return { ...tokens, user: userDto };
+  }
+
+  async logout(refreshToken: string) {
+    return await TokenService.removeToken(refreshToken);
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw ApiError.UnauthorizedError();
+    }
+
+    const userData = TokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await TokenService.findToken(refreshToken);
+
+    if (!userData || !tokenFromDb) {
+      throw ApiError.UnauthorizedError();
+    }
+
+    const user = await User.findById((userData as UserDto).id);
+    const userDto = new UserDto((user as IUser));
+    const tokens = TokenService.generateTokens({ ...userDto });
+
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
+
+    return { ...tokens, user: userDto };
+  }
+
+  async getAllUsers() {
+    return await User.find();;
   }
 }
 

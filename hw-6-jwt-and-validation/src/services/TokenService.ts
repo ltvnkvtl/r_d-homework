@@ -11,6 +11,22 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
+  validateAccessToken(accessToken: string) {
+    try {
+      return jwt.verify(accessToken, `${process.env.JWT_ACCESS_SECRET}`);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(refreshToken: string) {
+    try {
+      return jwt.verify(refreshToken, `${process.env.JWT_REFRESH_SECRET}`);
+    } catch (e) {
+      return null;
+    }
+  }
+
   async saveToken(userId: string, refreshToken: string) {
     const tokenData = await Token.findOne({ user: userId });
 
@@ -19,9 +35,15 @@ class TokenService {
       return tokenData.save();
     }
 
-    const token = await Token.create({ user: userId, refreshToken });
+    return await Token.create({ user: userId, refreshToken });
+  }
 
-    return token;
+  async removeToken(refreshToken: string) {
+    return await Token.deleteOne({ refreshToken });
+  }
+
+  async findToken(refreshToken: string) {
+    return await Token.findOne({ refreshToken });
   }
 }
 
