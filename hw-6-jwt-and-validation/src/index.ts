@@ -9,7 +9,7 @@ const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 
 const swaggerUi = require('swagger-ui-express');
-const DB_URL = `mongodb+srv://rd-hw-5-admin:${process.env.MONGO_PASSWORD}@cluster0.9sspa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const DB_URL = `mongodb+srv://rd-hw-5-admin:${process.env.MONGO_PASSWORD}@cluster0.9sspa.mongodb.net/UsersAndTokens?retryWrites=true&w=majority`;
 console.log(DB_URL)
 const app = express();
 app.use(
