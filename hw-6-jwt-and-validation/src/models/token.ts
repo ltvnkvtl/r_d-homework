@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import {IToken} from "./iToken";
 
 const Schema = mongoose.Schema;
 
@@ -7,4 +8,4 @@ const tokenScheme = new Schema({
     refreshToken: { type: String, required: true },
 });
 
-export default mongoose.model('Token', tokenScheme);
+export default mongoose.model<IToken>('Token', tokenScheme);

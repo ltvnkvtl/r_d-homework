@@ -6,6 +6,7 @@ import userRouter from './routes/userRouter';
 import tokenRouter from './routes/tokenRouter';
 
 const dotenv = require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 const swaggerUi = require('swagger-ui-express');
 const DB_URL = `mongodb+srv://rd-hw-5-admin:${process.env.MONGO_PASSWORD}@cluster0.9sspa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -17,6 +18,7 @@ app.use(
     }),
 );
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', userRouter);
 app.use('/api', tokenRouter);
