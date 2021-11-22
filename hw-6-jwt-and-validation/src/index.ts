@@ -3,7 +3,7 @@ import express from 'express';
 
 import * as swaggerDocument from './swagger.json';
 import userRouter from './routes/userRouter';
-import tokenRouter from './routes/tokenRouter';
+import {errorHandler} from "./middleware/error-middleware";
 
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
@@ -21,7 +21,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', userRouter);
-app.use('/api', tokenRouter);
+app.use(errorHandler)
+
 const port = 3030;
 
 function startApp(): void {

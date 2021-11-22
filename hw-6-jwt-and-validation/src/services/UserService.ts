@@ -3,13 +3,14 @@ import * as bcrypt from 'bcrypt';
 import {IUser} from "../models/iUser";
 import TokenService from "./TokenService";
 import {UserDto} from "../dto/UserDto";
+import ApiError from "../exceptions/ApiErrors";
 
 class UserService {
   async registration(user: IUser) {
     const candidate = await User.findOne({ email: user.email });
 
     if (candidate) {
-      throw new Error(`User with email ${user.email} already exist`);
+      throw ApiError.BadRequest(`User with email ${user.email} already exist`);
     }
 
     const hashPassword = await bcrypt.hash(user.password, 3)
