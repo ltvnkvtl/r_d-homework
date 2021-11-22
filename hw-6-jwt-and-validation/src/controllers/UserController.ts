@@ -31,20 +31,21 @@ class UserController {
     }
   }
 
-  async updateOne(req: Request, res: Response) {
+  async updateUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.body;
-      if (!user._id) {
-        return res.status(400).json({message: 'id не указан'});
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
       }
-      if (user.token) {
-        return res.status(400).json({message: 'use /api/tokens endpoint to update token'});
-      }
-      const updatedUser = await User.findByIdAndUpdate(user._id, user, {new: true});
+
+      let user = req.body;
+
+      const updatedUser = await UserService.updateUser(user);
 
       return res.json(updatedUser);
     } catch (e) {
-      res.status(500).json(e);
+      next(e);
     }
   }
 
