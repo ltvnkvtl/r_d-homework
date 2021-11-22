@@ -23,6 +23,12 @@ class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
+      }
+
       const { email, password } = req.body;
       const userData = await UserService.login(email, password);
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
@@ -55,24 +61,6 @@ class UserController {
     }
   }
 
-  async create(req: Request, res: Response) {
-    try {
-      if (!req.body) return res.status(400).send('empty body');
-
-      const {name, role} = req.body;
-
-      // Validate user input
-      if (!name) {
-        res.status(400).send('name is required');
-      }
-
-      const user = await User.create({name, role: role || 'user'});
-      res.status(200).json(user);
-    } catch (e) {
-      res.status(500).json(e);
-    }
-  }
-
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await UserService.getAllUsers();
@@ -83,17 +71,19 @@ class UserController {
     }
   }
 
-  async getOne(req: Request, res: Response) {
+  async getUserById(req: Request, res: Response, next: NextFunction) {
     try {
-      const {id} = req.params;
-      if (!id) {
-        return res.status(400).json({message: 'id не указан'});
-      }
-      const user = await User.findById(id);
+      const errors = validationResult(req);
 
-      user ? res.status(200).json(user) : res.status(404).send({message: 'User not found'});
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
+      }
+
+      const user = await UserService.getUserById(req.params.id);
+
+      return res.json(user);
     } catch (e) {
-      res.status(500).json(e);
+      next(e);
     }
   }
 

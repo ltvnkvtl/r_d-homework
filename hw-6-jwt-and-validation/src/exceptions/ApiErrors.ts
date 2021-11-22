@@ -15,6 +15,10 @@ class ApiError extends Error {
     static BadRequest(message: string, errors: any[] = []): ApiError {
       return new ApiError(400, message, errors);
     }
+
+    static NotFoundError(message: string): ApiError {
+      return new ApiError(404, message);
+    }
 }
 
 export default ApiError;

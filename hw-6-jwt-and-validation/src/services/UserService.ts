@@ -1,6 +1,6 @@
 import User from '../models/user';
 import * as bcrypt from 'bcrypt';
-import {IUser} from "../models/iUser";
+import {IUser, UserWithTokens} from "../models/iUser";
 import TokenService from "./TokenService";
 import {UserDto} from "../dto/UserDto";
 import ApiError from "../exceptions/ApiErrors";
@@ -16,11 +16,7 @@ class UserService {
     const hashPassword = await bcrypt.hash(user.password, 3)
     const newUser = await User.create( { ...user, password: hashPassword });
 
-    const userDto = new UserDto(newUser); // id, email
-    const tokens = TokenService.generateTokens({ ...userDto });
-    await TokenService.saveToken(userDto.id, tokens.refreshToken);
-
-    return { ...tokens, user: userDto };
+    return getUserWithTokens(newUser);
   }
 
   async login(email: string, password: string) {
@@ -36,12 +32,7 @@ class UserService {
       throw ApiError.BadRequest(`Wrong password`);
     }
 
-    const userDto = new UserDto(user);
-    const tokens = TokenService.generateTokens({ ...userDto });
-
-    await TokenService.saveToken(userDto.id, tokens.refreshToken);
-
-    return { ...tokens, user: userDto };
+    return getUserWithTokens(user);
   }
 
   async logout(refreshToken: string) {
@@ -61,17 +52,37 @@ class UserService {
     }
 
     const user = await User.findById((userData as UserDto).id);
-    const userDto = new UserDto((user as IUser));
-    const tokens = TokenService.generateTokens({ ...userDto });
 
-    await TokenService.saveToken(userDto.id, tokens.refreshToken);
+    if (!user) {
+      throw ApiError.NotFoundError('User not found');
+    }
 
-    return { ...tokens, user: userDto };
+    return getUserWithTokens(user);
   }
 
   async getAllUsers() {
-    return await User.find();;
+    return await User.find();
   }
+
+  async getUserById(id: string) {
+    const user = await User.findById(id);
+
+    if (!user) {
+      throw ApiError.NotFoundError('User not found');
+    }
+
+    return user;
+  }
+}
+
+// @ts-ignore
+async function getUserWithTokens(user: IUser): UserWithTokens {
+  const userDto = new UserDto(user);
+  const tokens = TokenService.generateTokens({ ...userDto });
+
+  await TokenService.saveToken(userDto.id, tokens.refreshToken);
+
+  return { ...tokens, user: userDto };
 }
 
 export default new UserService();
