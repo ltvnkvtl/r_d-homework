@@ -6,6 +6,7 @@ import { serve, setup } from 'swagger-ui-express';
 
 import * as swaggerDocument from './swagger.json';
 import userRouter from './routes/userRouter';
+import authRouter from "./routes/authRouter";
 import { errorMiddleware } from "./middleware/error-middleware";
 
 config(); // .env
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', serve, setup(swaggerDocument));
 app.use('/api', userRouter);
+app.use('/api/auth', authRouter);
 app.use(errorMiddleware)
 
 
