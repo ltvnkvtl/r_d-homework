@@ -4,6 +4,7 @@ import UserController from '../controllers/UserController';
 import { body, param } from "express-validator";
 import { authMiddleWare } from "../middleware/auth-middleware";
 import { isUserRole } from "../helper-functions/helper-functions";
+import { adminMiddleWare } from "../middleware/admin-middleware";
 
 const userRouter = express.Router();
 
@@ -24,7 +25,8 @@ userRouter.put('/users',
 
 userRouter.delete('/users/:id',
   authMiddleWare,
+  adminMiddleWare,
   param('id').isMongoId(),
-  UserController.deleteOne);
+  UserController.deleteUser);
 
 export default userRouter;

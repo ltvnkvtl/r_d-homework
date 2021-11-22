@@ -49,21 +49,19 @@ class UserController {
     }
   }
 
-  async deleteOne(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.params.id;
-      const role = (req as any).user.role;
-      if (role !== 'admin') {
-        return res.status(403).json({message: 'You should be an admin'});
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
       }
-      if (!id) {
-        return res.status(400).json({message: 'id не указан'});
-      }
-      const deletedUser = await User.findByIdAndDelete(id);
+
+      const deletedUser = await UserService.deleteUser(req.params.id);
 
       return res.json(deletedUser);
     } catch (e) {
-      res.status(500).json(e);
+      next(e);
     }
   }
 }

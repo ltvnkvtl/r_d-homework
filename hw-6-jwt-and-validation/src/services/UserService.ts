@@ -41,6 +41,16 @@ class UserService {
 
     return { ...new UserDto(updatedUser) };
   }
+
+  async deleteUser(id: string) {
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      throw ApiError.NotFoundError('User not found');
+    }
+
+    return { ...new UserDto(deletedUser) };
+  }
 }
 
 export default new UserService();
