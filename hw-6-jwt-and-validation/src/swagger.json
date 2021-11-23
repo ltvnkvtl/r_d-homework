@@ -1,9 +1,9 @@
 {
-    "swagger": "2.0",
+    "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Swagger HW-3 Application API for Node.js course",
-        "description": "Swagger HW-3 Application API for Node.js course",
+        "title": "Swagger HW-6 Application API for Node.js course",
+        "description": "Swagger HW-6 Application API for Node.js course",
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
@@ -13,18 +13,400 @@
     "basePath": "/api",
     "tags": [
         {
-            "name": "Users",
-            "description": "API for users"
+            "name": "Auth",
+            "description": "API for auth. Registration, Login, Logout, Refresh. Token logic is here"
         },
         {
-            "name": "Tokens",
-            "description": "API for tokens"
+          "name": "Users",
+          "description": "API for users. Get All, Get One, Update, Delete"
         }
     ],
+    "securityDefinitions": {
+      "refreshToken": {
+        "type": "apiKey",
+        "name": "refreshToken",
+        "in": "header"
+      }
+    },
     "schemes": ["http"],
     "consumes": ["application/json"],
     "produces": ["application/json"],
     "paths": {
+        "/auth/registration": {
+          "post": {
+            "tags": ["Auth"],
+            "summary": "Register (create) new User",
+            "description": "Register (create) new User",
+            "parameters": [
+              {
+                "name": "User",
+                "in": "body",
+                "required": true,
+                "description": "Post body to register user. Role can be 'user' or 'admin'. Default role is 'user'. Email and Password required",
+                "schema": {
+                  "type": "object",
+                  "required": ["email", "password"],
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string",
+                      "default": "user"
+                    }
+                  }
+                }
+              }
+            ],
+            "produces": ["application/json"],
+            "responses": {
+              "200": {
+                "description": "User is created",
+                "schema": {
+                  "$ref": "#/definitions/UserWithTokens"
+                },
+                "headers": {
+                  "Set-Cookie": {
+                    "type": "string",
+                    "description": "Registration returns a cookie named `refreshToken`. You need to include this cookie in logout and refresh request",
+                    "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJiZjM4YTc2YmM2NDRlZWIyMGJlNSIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJBZG1pbiIsImlhdCI6MTYzNzYyMTUyMywiZXhwIjoxNjQwMjEzNTIzfQ.DQ9sYnAI8KfjVhBWS9yBrjquXvYrULlqT53FAsFnOGI"
+                  }
+                }
+              },
+              "400": {
+                "description": "Bad request. Validation errors. User Already exist",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "500": {
+                "description": "Необработанная ошибка",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              }
+            }
+          },
+          "put": {
+            "tags": ["Tokens"],
+            "summary": "Edit user token",
+            "description": "Edit user token",
+            "parameters": [
+              {
+                "name": "_id",
+                "in": "body",
+                "required": true,
+                "description": "User ID to edit token",
+                "schema": {
+                  "type": "object",
+                  "required": ["_id"],
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ],
+            "produces": ["application/json"],
+            "responses": {
+              "200": {
+                "description": "User token edited",
+                "schema": {
+                  "$ref": "#/definitions/Tokens"
+                }
+              },
+              "400": {
+                "description": "Empty post body or no 'name' field"
+              },
+              "404": {
+                "description": "User not found"
+              }
+            }
+          }
+        },
+        "/auth/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Login with email and password",
+          "description": "Login with email and password",
+          "parameters": [
+            {
+              "name": "Credentials",
+              "in": "body",
+              "required": true,
+              "description": "Email and Password to login. Required",
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Successful login",
+              "schema": {
+                "$ref": "#/definitions/UserWithTokens"
+              },
+              "headers": {
+                "Set-Cookie": {
+                  "type": "string",
+                  "description": "Registration returns a cookie named `refreshToken`. You need to include this cookie in logout and refresh request",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJiZjM4YTc2YmM2NDRlZWIyMGJlNSIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJBZG1pbiIsImlhdCI6MTYzNzYyMTUyMywiZXhwIjoxNjQwMjEzNTIzfQ.DQ9sYnAI8KfjVhBWS9yBrjquXvYrULlqT53FAsFnOGI"
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request. Validation errors. User not found. Wrong password",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "500": {
+              "description": "Необработанная ошибка",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": ["Tokens"],
+          "summary": "Edit user token",
+          "description": "Edit user token",
+          "parameters": [
+            {
+              "name": "_id",
+              "in": "body",
+              "required": true,
+              "description": "User ID to edit token",
+              "schema": {
+                "type": "object",
+                "required": ["_id"],
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User token edited",
+              "schema": {
+                "$ref": "#/definitions/Tokens"
+              }
+            },
+            "400": {
+              "description": "Empty post body or no 'name' field"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+        "/auth/logout": {
+          "post": {
+            "tags": ["Auth"],
+            "summary": "Logout. ENTER refreshToken HERE(Click lock icon) ------------------------------------------------------->",
+            "description": "Logout will delete refreshToken from DB",
+            "security": [
+              {
+                "refreshToken": []
+              }
+            ],
+            "produces": ["application/json"],
+            "responses": {
+              "200": {
+                "description": "Successful logout",
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "put": {
+            "tags": ["Tokens"],
+            "summary": "Edit user token",
+            "description": "Edit user token",
+            "parameters": [
+              {
+                "name": "_id",
+                "in": "body",
+                "required": true,
+                "description": "User ID to edit token",
+                "schema": {
+                  "type": "object",
+                  "required": ["_id"],
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ],
+            "produces": ["application/json"],
+            "responses": {
+              "200": {
+                "description": "User token edited",
+                "schema": {
+                  "$ref": "#/definitions/Tokens"
+                }
+              },
+              "400": {
+                "description": "Empty post body or no 'name' field"
+              },
+              "404": {
+                "description": "User not found"
+              }
+            }
+          }
+        },
+        "/auth/refresh": {
+        "get": {
+          "tags": ["Auth"],
+          "summary": "Logout. ENTER refreshToken HERE(Click lock icon) ------------------------------------------------------->",
+          "description": "Logout will delete refreshToken from DB",
+          "security": [
+            {
+              "refreshToken": []
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Successful logout",
+              "schema": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Success"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": ["Tokens"],
+          "summary": "Edit user token",
+          "description": "Edit user token",
+          "parameters": [
+            {
+              "name": "_id",
+              "in": "body",
+              "required": true,
+              "description": "User ID to edit token",
+              "schema": {
+                "type": "object",
+                "required": ["_id"],
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User token edited",
+              "schema": {
+                "$ref": "#/definitions/Tokens"
+              }
+            },
+            "400": {
+              "description": "Empty post body or no 'name' field"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+        "/tokens/{userId}": {
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "description": "ID of user that we want to find or delete",
+              "type": "string"
+            }
+          ],
+          "get": {
+            "tags": ["Tokens"],
+            "summary": "Get user token with given ID",
+            "responses": {
+              "200": {
+                "description": "User token is found",
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6IlZpdGFseSIsImlhdCI6MTYzNjQ2ODg5NywiZXhwIjoxNjM2NDk3Njk3fQ.XWVdIKi7kPAHUyDuIRaTYSfYfpqmYq1Fosn5Sc9ANVA"
+                }
+              },
+              "404": {
+                "description": "User not found or doesn't have token"
+              }
+            }
+          },
+          "delete": {
+            "summary": "Delete token with given ID. Only admins with jwt token can delete user token.",
+            "tags": ["Tokens"],
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "required": true,
+                "description": "JWT token of user",
+                "schema": {
+                  "type": "string",
+                  "format": "jwt",
+                  "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "User token is deleted",
+                "schema": {
+                  "$ref": "#/definitions/Tokens"
+                }
+              },
+              "403": {
+                "description": "Only admins with jwt token can delete users token."
+              },
+              "404": {
+                "description": "User not found or doesn't have token"
+              }
+            }
+          }
+        },
         "/users": {
             "get": {
                 "tags": ["Users"],
@@ -176,164 +558,18 @@
                     }
                 }
             }
-        },
-        "/tokens": {
-            "get": {
-                "tags": ["Tokens"],
-                "summary": "Get all users tokens",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Tokens"
-                        }
-                    },
-                    "404": {
-                        "description": "Every user does not have token"
-                    }
-                }
-            },
-            "post": {
-                "tags": ["Tokens"],
-                "summary": "Create user token",
-                "description": "Create user token",
-                "parameters": [
-                    {
-                        "name": "_id",
-                        "in": "body",
-                        "required": true,
-                        "description": "User ID to create token.",
-                        "schema": {
-                            "type": "object",
-                            "required": ["_id"],
-                            "properties": {
-                                "_id": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "produces": ["application/json"],
-                "responses": {
-                    "200": {
-                        "description": "User token is created",
-                        "schema": {
-                            "$ref": "#/definitions/Tokens"
-                        }
-                    },
-                    "400": {
-                        "description": "Empty post body or no '_id' field"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                }
-            },
-            "put": {
-                "tags": ["Tokens"],
-                "summary": "Edit user token",
-                "description": "Edit user token",
-                "parameters": [
-                    {
-                        "name": "_id",
-                        "in": "body",
-                        "required": true,
-                        "description": "User ID to edit token",
-                        "schema": {
-                            "type": "object",
-                            "required": ["_id"],
-                            "properties": {
-                                "_id": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "produces": ["application/json"],
-                "responses": {
-                    "200": {
-                        "description": "User token edited",
-                        "schema": {
-                            "$ref": "#/definitions/Tokens"
-                        }
-                    },
-                    "400": {
-                        "description": "Empty post body or no 'name' field"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                }
-            }
-        },
-        "/tokens/{userId}": {
-            "parameters": [
-                {
-                    "name": "userId",
-                    "in": "path",
-                    "required": true,
-                    "description": "ID of user that we want to find or delete",
-                    "type": "string"
-                }
-            ],
-            "get": {
-                "tags": ["Tokens"],
-                "summary": "Get user token with given ID",
-                "responses": {
-                    "200": {
-                        "description": "User token is found",
-                        "schema": {
-                            "type": "string",
-                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6IlZpdGFseSIsImlhdCI6MTYzNjQ2ODg5NywiZXhwIjoxNjM2NDk3Njk3fQ.XWVdIKi7kPAHUyDuIRaTYSfYfpqmYq1Fosn5Sc9ANVA"
-                        }
-                    },
-                    "404": {
-                        "description": "User not found or doesn't have token"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete token with given ID. Only admins with jwt token can delete user token.",
-                "tags": ["Tokens"],
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "description": "JWT token of user",
-                        "schema": {
-                            "type": "string",
-                            "format": "jwt",
-                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InVzZXIiLCJuYW1lIjoiTWFrcyIsImlhdCI6MTYzNjQ2ODgxOCwiZXhwIjoxNjM2NDk3NjE4fQ.itzJ5I0PSyJ9D_-quPPdbNbSnzmUS09WhWVoAUNabWI"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User token is deleted",
-                        "schema": {
-                            "$ref": "#/definitions/Tokens"
-                        }
-                    },
-                    "403": {
-                        "description": "Only admins with jwt token can delete users token."
-                    },
-                    "404": {
-                        "description": "User not found or doesn't have token"
-                    }
-                }
-            }
         }
     },
     "definitions": {
         "User": {
-            "required": ["_id", "role", "name"],
             "properties": {
-                "_id": {
+                "id": {
                     "type": "string",
                     "uniqueItems": true
+                },
+                "email": {
+                  "type": "string",
+                  "uniqueItems": true
                 },
                 "role": {
                     "type": "string"
@@ -342,6 +578,32 @@
                     "type": "string"
                 }
             }
+        },
+        "UserWithTokens": {
+          "properties": {
+            "accessToken": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+            },
+            "user": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        },
+        "Error": {
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
         },
         "Tokens": {
             "required": ["_id", "userId", "tokens"],
