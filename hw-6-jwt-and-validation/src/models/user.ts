@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {IUser, RoleType} from "./iUser";
+import { IUser, RoleType } from './iUser';
 
 const Schema = mongoose.Schema;
 

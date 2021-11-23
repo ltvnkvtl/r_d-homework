@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {IToken} from "./iToken";
+import { IToken } from './iToken';
 
 const Schema = mongoose.Schema;
 

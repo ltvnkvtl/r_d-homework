@@ -1,56 +1,55 @@
-import User from "../models/user";
-import ApiError from "../exceptions/ApiErrors";
-import { IUser } from "../models/iUser";
-import * as bcrypt from "bcrypt";
-import { UserDto } from "../dto/UserDto";
+import User from '../models/user';
+import ApiError from '../exceptions/ApiErrors';
+import { IUser } from '../models/iUser';
+import * as bcrypt from 'bcrypt';
+import { UserDto } from '../dto/UserDto';
 
 class UserService {
-  async getAllUsers() {
-    return await User.find();
-  }
-
-  async getUserById(id: string) {
-    const user = await User.findById(id);
-
-    if (!user) {
-      throw ApiError.NotFoundError('User not found');
+    async getAllUsers() {
+        return await User.find();
     }
 
-    return user;
-  }
+    async getUserById(id: string) {
+        const user = await User.findById(id);
 
-  async updateUser(user: Partial<IUser>) {
+        if (!user) {
+            throw ApiError.NotFoundError('User not found');
+        }
 
-    if (user.password) {
-      user.password = await bcrypt.hash(user.password, 3);
+        return user;
     }
 
-    if (user.email) {
-      const userByEmail = await User.findOne({ email: user.email });
+    async updateUser(user: Partial<IUser>) {
+        if (user.password) {
+            user.password = await bcrypt.hash(user.password, 3);
+        }
 
-      if (userByEmail) {
-        throw ApiError.BadRequest(`user with email ${user.email} already exist`);
-      }
+        if (user.email) {
+            const userByEmail = await User.findOne({ email: user.email });
+
+            if (userByEmail) {
+                throw ApiError.BadRequest(`user with email ${user.email} already exist`);
+            }
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user.id, user, { new: true });
+
+        if (!updatedUser) {
+            throw ApiError.NotFoundError('User not found');
+        }
+
+        return { ...new UserDto(updatedUser) };
     }
 
-    const updatedUser = await User.findByIdAndUpdate(user.id, user, {new: true});
+    async deleteUser(id: string) {
+        const deletedUser = await User.findByIdAndDelete(id);
 
-    if (!updatedUser) {
-      throw ApiError.NotFoundError('User not found');
+        if (!deletedUser) {
+            throw ApiError.NotFoundError('User not found');
+        }
+
+        return { ...new UserDto(deletedUser) };
     }
-
-    return { ...new UserDto(updatedUser) };
-  }
-
-  async deleteUser(id: string) {
-    const deletedUser = await User.findByIdAndDelete(id);
-
-    if (!deletedUser) {
-      throw ApiError.NotFoundError('User not found');
-    }
-
-    return { ...new UserDto(deletedUser) };
-  }
 }
 
 export default new UserService();

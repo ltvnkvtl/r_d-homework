@@ -1,5 +1,5 @@
-import {RoleType} from "../models/iUser";
+import { RoleType } from '../models/iUser';
 
 export const isUserRole = (role: RoleType): boolean => {
-  return role === RoleType.USER || role === RoleType.ADMIN;
-}
+    return role === RoleType.USER || role === RoleType.ADMIN;
+};
