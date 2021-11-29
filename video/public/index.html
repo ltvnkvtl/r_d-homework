@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Video chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  </head>
+  <body>
+    <div id="active-user-container">
+      <h3>Active Users:</h3>
+    </div>
+    <div class="video-chat-container">
+      <h2 id="talking-with-info">
+        JOIN localhost:5000 from browser + incognito window (2 connections) and click on "active user"(above ^^^^) from browser window
+      </h2>
+      <div class="video-container">
+        <video autoplay class="remote-video" id="remote-video"></video>
+        <video autoplay muted class="local-video" id="local-video"></video>
+      </div>
+    </div>
+    <script>
+      let isAlreadyCalling = false;
+      const { RTCPeerConnection, RTCSessionDescription } = window;
+      const peerConnection = new RTCPeerConnection();
+      const socket = io.connect("localhost:5000");
+
+      // отображаем видео с веб камеры (нашего компа)
+      navigator.getUserMedia(
+        { video: true, audio: true },
+        stream => {
+          const localVideo = document.getElementById("local-video");
+          if (localVideo) {
+            localVideo.srcObject = stream;
+          }
+
+          stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+        },
+        error => {
+          console.warn(error.message);
+        }
+      );
+
+      // обновляем список пользователей
+      socket.on("update-user-list", ({ users }) => {
+        updateUserList(users);
+      });
+
+      socket.on("call-made", async data => {
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(data.offer)
+        );
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(new RTCSessionDescription(answer));
+
+        socket.emit("make-answer", {
+          answer,
+          to: data.socket
+        });
+      });
+
+      socket.on("answer-made", async data => {
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(data.answer)
+        );
+
+        if (!isAlreadyCalling) {
+          callUser(data.socket);
+          isAlreadyCalling = true;
+        }
+      });
+
+      peerConnection.ontrack = function({ streams: [stream] }) {
+        const remoteVideo = document.getElementById("remote-video");
+        if (remoteVideo) {
+          remoteVideo.srcObject = stream;
+        }
+      };
+
+      // ===============================================================
+
+      // вызов юзера
+      async function callUser(socketId) {
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+
+        socket.emit("call-user", {
+          offer,
+          to: socketId
+        });
+      }
+
+      // создаем юзера и вешаем обработчик на вызов по клику
+      function createUserItem(socketId) {
+        const userContainerEl = document.createElement("div");
+        userContainerEl.setAttribute("id", socketId);
+        userContainerEl.style.cursor = "pointer";
+        userContainerEl.innerHTML = `Socket: ${socketId}`;
+
+        userContainerEl.addEventListener("click", () => {
+          callUser(socketId);
+        });
+
+        return userContainerEl;
+      }
+
+      // обновляем список
+      function updateUserList(socketIds) {
+        const activeUserContainer = document.getElementById("active-user-container");
+
+        socketIds.forEach(socketId => {
+          const alreadyExistingUser = document.getElementById(socketId);
+          if (!alreadyExistingUser) {
+            const userContainerEl = createUserItem(socketId);
+
+            activeUserContainer.appendChild(userContainerEl);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
